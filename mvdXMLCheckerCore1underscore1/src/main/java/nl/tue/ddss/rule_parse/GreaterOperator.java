@@ -4,9 +4,13 @@ import java.util.Collection;
 
 import org.bimserver.emf.IdEObject;
 
+import de.rwth_aachen.dc.mvd.events.CheckerShortNotificationEvent;
+import fi.aalto.drumbeat.DrumbeatUserManager.events.EventBusCommunication;
+
 //rewritten by JO 2020
 
-public class GreaterOperator {
+public class GreaterOperator extends AbstractComparatorOperator{
+
     // fields
     private Object leftOperand;
     private Object rightOperand;
@@ -39,52 +43,36 @@ public class GreaterOperator {
 
     public Boolean getResult() {
 	Boolean result = false;
-	double right = Double.NaN;
-	double left = Double.NaN;
+	Double right = Double.NaN;
+	Double left = Double.NaN;
 
-	if (rightOperand instanceof String) {
-	    try {
-		
-		right = Double.parseDouble((String) rightOperand);
-	    } catch (Exception e) {
-		e.printStackTrace();
-	    }
-	}
-	if (rightOperand instanceof Double)
-	    right = (Double) rightOperand;
-	if (rightOperand instanceof Integer)
-	    right = (Double) rightOperand;
-
-	if (rightOperand instanceof Collection)
-	    System.out.println("To be later supported");
-	if (rightOperand instanceof IdEObject)
-	    System.out.println("To be later supported");
-
-	
-	if (leftOperand instanceof String) {
-	    try {
-		left = Double.parseDouble((String) leftOperand);
-	    } catch (Exception e) {
-		e.printStackTrace();
-	    }
-	}
-	if (leftOperand instanceof Double)
-	    left = (Double) leftOperand;
-	if (leftOperand instanceof Integer)
-	    left = (Double) leftOperand;
-
-	if (leftOperand instanceof Collection)
-	    System.out.println("To be later supported");
-	if (leftOperand instanceof IdEObject)
-	    System.out.println("To be later supported");
+	right=getValue(rightOperand);
+	left=getValue(leftOperand);
+	if(right==null)
+	    return false;
+	if(left==null)
+	    return false;
 
 	if (right != Double.NaN && left != Double.NaN)
+	{
 	    if (left > right)
 		result = true;
 	    else
 		result = false;
+	}
+	else 
+	{
+	    communication.post(new CheckerShortNotificationEvent("( <B style=\"color:red\"> "+leftOperand+ " NOT > " + rightOperand+"</B> )"));
+	    return false;
+        }
+	
+	
+	if(result==false)
+		communication.post(new CheckerShortNotificationEvent("( <B style=\"color:red\"> "+left+ " NOT > " + right+"</B> )"));
+	else
+		communication.post(new CheckerShortNotificationEvent("( <B style=\"color:green\"> "+left+ " > " + right+"</B> )"));
+
+	System.out.println("was greater");
 	return result;
     }
-    
-    
 }

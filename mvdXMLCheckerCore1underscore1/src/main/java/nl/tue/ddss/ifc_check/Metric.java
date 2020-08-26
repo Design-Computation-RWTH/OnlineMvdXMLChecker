@@ -21,7 +21,7 @@ public class Metric {
 	} else if (value instanceof Collection) {
 	    metricSize = ((Collection) value).size();
 	} else {
-	    metricSize = 1;
+	    metricSize = 1;  
 	}
 	return metricSize;
     }
@@ -32,10 +32,11 @@ public class Metric {
     }
 
     public Object getMetricValue() {
-	if (value instanceof String || value instanceof Double || value instanceof Integer || value instanceof Boolean) {
+	// Fixed by JO 2020
+	if (value instanceof String || value instanceof Float || value instanceof Double || value instanceof Long|| value instanceof Integer || value instanceof Boolean) {
 	    metricValue = value;
 	} else {
-	    metricValue = null;
+	    metricValue = value;  // no reason to set to null
 	}
 	return metricValue;
     }
