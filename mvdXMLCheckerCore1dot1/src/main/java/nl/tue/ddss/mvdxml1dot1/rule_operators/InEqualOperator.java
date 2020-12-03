@@ -44,7 +44,7 @@ public class InEqualOperator {
 	}
 
 	public Boolean getResult() {
-		Boolean result = new Boolean(true);
+		Boolean result = new Boolean(false);
 		if (rightOperand instanceof String) {
 			if (((String) rightOperand).startsWith("reg")) {
 				String reg = ((String) rightOperand).substring(4);
@@ -118,6 +118,18 @@ public class InEqualOperator {
 				else
 					result = true;
 			}
+			 {
+				try
+				{
+				if(rightOperand.equals(Double.parseDouble(leftOperand+"")))
+				    return false;
+				else
+				    return true;
+				}
+				catch (NumberFormatException e) {
+				    return false;
+				}
+			    }
 		} else if (rightOperand instanceof IdEObject) {
 			if (leftOperand instanceof IdEObject) {
 				String typeName = leftOperand.getClass().getSimpleName();
@@ -129,18 +141,21 @@ public class InEqualOperator {
 				}
 			}
 			else
-			System.out.println("To be later supported");
+			//System.out.println("To be later supported");
 			result = false;
 		} else if (rightOperand instanceof Collection) {
-			System.out.println("To be later supported");
+			//System.out.println("To be later supported");
 			result = false;
 		}
 		
 		if(result==false)
+		{
 			communication.post(new CheckerShortNotificationEvent("( <B style=\"color:red\"> \""+leftOperand+ "\" NOT <> \"" + rightOperand+"\"</B> )"));
+		}
 		else
+		{
 			communication.post(new CheckerShortNotificationEvent("( <B style=\"color:green\"> \""+leftOperand+ "\" <> \"" + rightOperand+"\"</B> )"));
-
+		}
 		return result;
 	}
 }

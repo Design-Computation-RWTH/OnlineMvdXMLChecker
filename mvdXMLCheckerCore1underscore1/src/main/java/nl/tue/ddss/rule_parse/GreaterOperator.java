@@ -53,7 +53,7 @@ public class GreaterOperator extends AbstractComparatorOperator{
 	if(left==null)
 	    return false;
 
-	if (right != Double.NaN && left != Double.NaN)
+	if (!Double.isNaN(right) && !Double.isNaN(left)) 
 	{
 	    if (left > right)
 		result = true;
@@ -72,7 +72,7 @@ public class GreaterOperator extends AbstractComparatorOperator{
 	else
 		communication.post(new CheckerShortNotificationEvent("( <B style=\"color:green\"> "+left+ " > " + right+"</B> )"));
 
-	System.out.println("was greater");
+	//System.out.println("was greater");
 	return result;
     }
 }
